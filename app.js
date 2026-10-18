@@ -93,12 +93,14 @@ const doctors = [
 const form = document.querySelector("#appointment-form");
 const patientNameInput = document.querySelector("#patient-name");
 const phoneInput = document.querySelector("#phone");
+const specialtySelect = document.querySelector("#specialty");
 const doctorSelect = document.querySelector("#doctor");
 const dateInput = document.querySelector("#appointment-date");
 const timeSelect = document.querySelector("#appointment-time");
 const preview = document.querySelector("#message-preview");
 const formError = document.querySelector("#form-error");
 const whatsappPhonePrefix = "5930";
+const spanishCollator = new Intl.Collator("es", { sensitivity: "base" });
 let validationShown = false;
 
 function getLocalDateValue(date = new Date()) {
@@ -108,28 +110,45 @@ function getLocalDateValue(date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
-function populateDoctors() {
-  const doctorsBySpecialty = new Map();
+function getFirstSurname(name) {
+  const nameParts = name.replace(/^(?:Dr|Dra|Lcda|Lic)\.\s*/u, "").split(/\s+/u);
+  const surnameIndex = Math.max(nameParts.length - 2, 1);
+  return nameParts[surnameIndex] ?? "";
+}
 
-  for (const doctor of doctors) {
-    if (!doctorsBySpecialty.has(doctor.specialty)) {
-      doctorsBySpecialty.set(doctor.specialty, []);
-    }
-    doctorsBySpecialty.get(doctor.specialty).push(doctor);
+function populateSpecialties() {
+  const specialties = [...new Set(doctors.map((doctor) => doctor.specialty))].sort((a, b) =>
+    spanishCollator.compare(a, b),
+  );
+
+  for (const specialty of specialties) {
+    const option = document.createElement("option");
+    option.value = specialty;
+    option.textContent = specialty;
+    specialtySelect.append(option);
   }
+}
 
-  for (const [specialty, specialtyDoctors] of doctorsBySpecialty) {
-    const group = document.createElement("optgroup");
-    group.label = specialty;
+function populateDoctors() {
+  doctorSelect.replaceChildren(new Option("Selecciona un médico", ""));
+  const selectedSpecialty = specialtySelect.value;
+  doctorSelect.disabled = !selectedSpecialty;
 
-    for (const doctor of specialtyDoctors) {
-      const option = document.createElement("option");
-      option.value = doctor.name;
-      option.textContent = doctor.name;
-      group.append(option);
-    }
+  const specialtyDoctors = doctors
+    .filter((doctor) => doctor.specialty === selectedSpecialty)
+    .sort((a, b) => {
+      const surnameComparison = spanishCollator.compare(
+        getFirstSurname(a.name),
+        getFirstSurname(b.name),
+      );
+      return surnameComparison || spanishCollator.compare(a.name, b.name);
+    });
 
-    doctorSelect.append(group);
+  for (const doctor of specialtyDoctors) {
+    const option = document.createElement("option");
+    option.value = doctor.name;
+    option.textContent = doctor.name;
+    doctorSelect.append(option);
   }
 }
 
@@ -228,9 +247,14 @@ function updateValidationMessages() {
   );
   setFieldError(phoneInput, document.querySelector("#phone-error"), phoneError);
   setFieldError(
+    specialtySelect,
+    document.querySelector("#specialty-error"),
+    specialtySelect.value ? "" : "Selecciona una especialidad.",
+  );
+  setFieldError(
     doctorSelect,
     document.querySelector("#doctor-error"),
-    doctorSelect.value ? "" : "Selecciona un médico.",
+    specialtySelect.value && !doctorSelect.value ? "Selecciona un médico." : "",
   );
   setFieldError(
     dateInput,
@@ -257,6 +281,7 @@ function validateForm() {
 
 function clearForm() {
   form.reset();
+  populateDoctors();
   dateInput.value = getLocalDateValue();
   validationShown = false;
   formError.hidden = true;
@@ -272,10 +297,13 @@ function clearForm() {
   updatePreview();
 }
 
+populateSpecialties();
 populateDoctors();
 populateAppointmentTimes();
 dateInput.value = getLocalDateValue();
 updatePreview();
+
+specialtySelect.addEventListener("change", populateDoctors);
 
 form.addEventListener("input", () => {
   updatePreview();

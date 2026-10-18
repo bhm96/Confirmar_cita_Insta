@@ -44,8 +44,16 @@
             </div>
 
             <div class="field field-wide">
+              <label for="specialty">Especialidad <span aria-hidden="true">*</span></label>
+              <select id="specialty" name="specialty" required aria-describedby="specialty-error">
+                <option value="">Selecciona una especialidad</option>
+              </select>
+              <small id="specialty-error" class="field-error" hidden>Selecciona una especialidad.</small>
+            </div>
+
+            <div class="field field-wide">
               <label for="doctor">Médico <span aria-hidden="true">*</span></label>
-              <select id="doctor" name="doctor" required aria-describedby="doctor-error">
+              <select id="doctor" name="doctor" required aria-describedby="doctor-error" disabled>
                 <option value="">Selecciona un médico</option>
               </select>
               <small id="doctor-error" class="field-error" hidden>Selecciona un médico.</small>
