@@ -7,8 +7,8 @@ Página estática para preparar confirmaciones de citas y abrirlas en WhatsApp p
 1. Abre la página desde la URL de GitHub Pages en un navegador.
 2. Escribe el nombre del paciente y solo los 9 dígitos de su número de WhatsApp, por ejemplo `991234567`. El prefijo `5930` se agrega automáticamente.
 3. Selecciona el médico, la fecha y una hora disponible.
-4. Revisa la vista previa del mensaje y pulsa **Abrir WhatsApp para enviar**.
-5. WhatsApp abrirá la conversación con el mensaje preparado. Los envíos posteriores desde esta página reutilizan la pestaña que abrió el formulario. Por restricciones de seguridad del navegador, la página no puede detectar ni controlar una pestaña de WhatsApp que ya estaba abierta por separado. Revísalo y pulsa **Enviar** dentro de WhatsApp.
+4. Revisa la vista previa del mensaje y pulsa **Ir a WhatsApp para enviar**.
+5. WhatsApp abrirá la conversación con el mensaje preparado en la pestaña actual. Revísalo y pulsa **Enviar** dentro de WhatsApp. Para preparar otro mensaje, vuelve al formulario con el botón **Atrás** del navegador.
 
 El mensaje de vista previa se actualiza al cambiar los campos y no se puede editar desde el formulario. Para cambiar los médicos disponibles, modifica la lista `doctors` al inicio de `app.js`.
 

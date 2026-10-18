@@ -99,8 +99,6 @@ const timeSelect = document.querySelector("#appointment-time");
 const preview = document.querySelector("#message-preview");
 const formError = document.querySelector("#form-error");
 const whatsappPhonePrefix = "5930";
-const whatsappWindowName = "instasalud-whatsapp";
-
 let validationShown = false;
 
 function getLocalDateValue(date = new Date()) {
@@ -306,7 +304,7 @@ form.addEventListener("submit", (event) => {
   const phone = normalizePhone(phoneInput.value);
   const message = buildMessage();
   const whatsappUrl = `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, whatsappWindowName);
+  window.location.assign(whatsappUrl);
 });
 
 document.querySelector("#clear-form").addEventListener("click", clearForm);
