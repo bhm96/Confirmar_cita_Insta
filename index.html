@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f3f6f4">
+    <title>Confirmación de citas</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <section class="card" aria-labelledby="page-title">
+        <header class="page-header">
+          <img class="brand-logo" src="images/instasalud-logo.png" alt="Logo de Instasalud">
+          <h1 id="page-title">Gestión de confirmaciones de citas</h1>
+          <p>Registra los datos del paciente y de la consulta para generar una confirmación personalizada y enviarla mediante WhatsApp.</p>
+        </header>
+
+        <form id="appointment-form" novalidate>
+          <div class="form-grid">
+            <div class="field field-wide">
+              <label for="patient-name">Nombre del paciente <span aria-hidden="true">*</span></label>
+              <input id="patient-name" name="patientName" type="text" autocomplete="name" maxlength="100" required aria-describedby="patient-name-error">
+              <small id="patient-name-error" class="field-error" hidden>Escribe el nombre del paciente.</small>
+            </div>
+
+            <div class="field field-wide">
+              <label for="phone">Número de WhatsApp (9 dígitos) <span aria-hidden="true">*</span></label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                inputmode="tel"
+                autocomplete="off"
+                maxlength="9"
+                pattern="[0-9]{9}"
+                placeholder="991234567"
+                aria-describedby="phone-help phone-error"
+                required
+              >
+              <small id="phone-help" class="field-help">Escribe solo los 9 dígitos. El prefijo 5930 se agrega automáticamente.</small>
+              <small id="phone-error" class="field-error" hidden></small>
+            </div>
+
+            <div class="field field-wide">
+              <label for="doctor">Médico <span aria-hidden="true">*</span></label>
+              <select id="doctor" name="doctor" required aria-describedby="doctor-error">
+                <option value="">Selecciona un médico</option>
+              </select>
+              <small id="doctor-error" class="field-error" hidden>Selecciona un médico.</small>
+            </div>
+
+            <div class="field">
+              <label for="appointment-date">Fecha de la cita <span aria-hidden="true">*</span></label>
+              <input id="appointment-date" name="appointmentDate" type="date" required aria-describedby="appointment-date-error">
+              <small id="appointment-date-error" class="field-error" hidden>Selecciona la fecha de la cita.</small>
+            </div>
+
+            <div class="field">
+              <label for="appointment-time">Hora de la cita <span aria-hidden="true">*</span></label>
+              <select id="appointment-time" name="appointmentTime" required aria-describedby="appointment-time-error">
+                <option value="">Selecciona una hora</option>
+              </select>
+              <small id="appointment-time-error" class="field-error" hidden>Selecciona la hora de la cita.</small>
+            </div>
+          </div>
+
+          <section class="preview" aria-labelledby="preview-title">
+            <div class="preview-heading">
+              <span class="eyebrow">VISTA PREVIA</span>
+              <h2 id="preview-title">Mensaje de confirmación</h2>
+            </div>
+            <p id="message-preview" class="message-preview" aria-live="polite"></p>
+            <p id="form-error" class="form-error" role="alert" hidden>Revisa los campos indicados antes de continuar.</p>
+          </section>
+
+          <div class="form-actions">
+            <button id="clear-form" class="button button-secondary" type="button">Limpiar formulario</button>
+            <button class="button button-primary" type="submit">Abrir WhatsApp para enviar</button>
+          </div>
+          <p class="send-note">Los envíos de esta página reutilizan la pestaña de WhatsApp que abrió el formulario. No es posible detectar ni reutilizar una pestaña que ya estaba abierta por separado. Revisa el mensaje y pulsa Enviar dentro de WhatsApp.</p>
+        </form>
+
+        <aside class="privacy-note">
+          <span class="privacy-icon" aria-hidden="true">🔒</span>
+          <p>Privacidad: los datos se procesan únicamente en este navegador. No se guardan ni se transmiten a ningún servidor.</p>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
