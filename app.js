@@ -116,6 +116,16 @@ function getFirstSurname(name) {
   return nameParts[surnameIndex] ?? "";
 }
 
+function formatDoctorOption(name) {
+  const title = name.match(/^(?:Dr|Dra|Lcda|Lic)\.\s*/u)?.[0] ?? "";
+  const nameParts = name.replace(/^(?:Dr|Dra|Lcda|Lic)\.\s*/u, "").split(/\s+/u);
+  const firstSurnameIndex = Math.max(nameParts.length - 2, 1);
+  const surnames = nameParts.slice(firstSurnameIndex).join(" ");
+  const givenNames = nameParts.slice(0, firstSurnameIndex).join(" ");
+
+  return `${surnames}, ${title}${givenNames}`;
+}
+
 function populateSpecialties() {
   const specialties = [...new Set(doctors.map((doctor) => doctor.specialty))].sort((a, b) =>
     spanishCollator.compare(a, b),
@@ -147,7 +157,7 @@ function populateDoctors() {
   for (const doctor of specialtyDoctors) {
     const option = document.createElement("option");
     option.value = doctor.name;
-    option.textContent = doctor.name;
+    option.textContent = formatDoctorOption(doctor.name);
     doctorSelect.append(option);
   }
 }
@@ -160,8 +170,8 @@ function formatTime(value) {
 }
 
 function populateAppointmentTimes() {
-  const startMinutes = 9 * 60;
-  const endMinutes = 20 * 60 + 40;
+  const startMinutes = 7 * 60;
+  const endMinutes = 21 * 60;
 
   for (let minutes = startMinutes; minutes <= endMinutes; minutes += 20) {
     const hours = Math.floor(minutes / 60);
