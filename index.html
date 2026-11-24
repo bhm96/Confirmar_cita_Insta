@@ -39,8 +39,16 @@
                 aria-describedby="phone-help phone-error"
                 required
               >
-              <small id="phone-help" class="field-help">Escribe solo los 9 dígitos. El prefijo 5930 se agrega automáticamente.</small>
+              <small id="phone-help" class="field-help">Escribe solo los 9 dígitos del celular, sin el cero inicial. El prefijo +593 se agrega automáticamente.</small>
               <small id="phone-error" class="field-error" hidden></small>
+            </div>
+
+            <div class="field field-wide consent-field">
+              <label class="consent-label" for="whatsapp-consent">
+                <input id="whatsapp-consent" name="whatsappConsent" type="checkbox" required aria-describedby="whatsapp-consent-error">
+                <span>Confirmo que la persona autorizó recibir recordatorios de citas por WhatsApp en este número. <span aria-hidden="true">*</span></span>
+              </label>
+              <small id="whatsapp-consent-error" class="field-error" hidden>Confirma que existe autorización antes de preparar el mensaje.</small>
             </div>
 
             <div class="field field-wide">

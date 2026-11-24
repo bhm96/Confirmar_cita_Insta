@@ -99,7 +99,7 @@ const dateInput = document.querySelector("#appointment-date");
 const timeSelect = document.querySelector("#appointment-time");
 const preview = document.querySelector("#message-preview");
 const formError = document.querySelector("#form-error");
-const whatsappPhonePrefix = "5930";
+const whatsappPhonePrefix = "593";
 const spanishCollator = new Intl.Collator("es", { sensitivity: "base" });
 let validationShown = false;
 
@@ -213,6 +213,18 @@ function getSelectedDoctor() {
   return doctors.find((doctor) => doctor.name === doctorSelect.value);
 }
 
+function getGreeting(date = new Date()) {
+  const hour = date.getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return "¡Buenos días!";
+  }
+  if (hour >= 12 && hour < 19) {
+    return "¡Buenas tardes!";
+  }
+  return "¡Buenas noches!";
+}
+
 function buildMessage() {
   const patientName = patientNameInput.value.trim() || "[nombre del paciente]";
   const date = formatAppointmentDate(dateInput.value);
@@ -222,7 +234,7 @@ function buildMessage() {
     ? `${doctor.name} (${doctor.specialty})`
     : "[Nombre del Medico (Especialidad)]";
 
-  return `¡Buen día!
+  return `${getGreeting()}
 
 Estimado(a) ${patientName}, le recordamos su cita médica mediante telemedicina con la/el ${doctorName}, programada para el ${date} a las ${time}.
 
@@ -256,6 +268,13 @@ function updateValidationMessages() {
     patientNameInput.value.trim() ? "" : "Escribe el nombre del paciente.",
   );
   setFieldError(phoneInput, document.querySelector("#phone-error"), phoneError);
+  setFieldError(
+    document.querySelector("#whatsapp-consent"),
+    document.querySelector("#whatsapp-consent-error"),
+    document.querySelector("#whatsapp-consent").checked
+      ? ""
+      : "Confirma que existe autorización antes de preparar el mensaje.",
+  );
   setFieldError(
     specialtySelect,
     document.querySelector("#specialty-error"),
@@ -313,6 +332,7 @@ populateAppointmentTimes();
 dateInput.value = getLocalDateValue();
 updatePreview();
 
+window.addEventListener("focus", updatePreview);
 specialtySelect.addEventListener("change", populateDoctors);
 
 form.addEventListener("input", () => {
@@ -332,6 +352,7 @@ form.addEventListener("change", () => {
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   validationShown = true;
+  updatePreview();
 
   if (!validateForm()) {
     const firstInvalidField = form.querySelector('[aria-invalid="true"]');
